@@ -17,56 +17,56 @@ resource "aws_security_group" "vprofile-bean-alb-sg" {
   }
 }
 
-resource "aws_security_group" "vprofile-bastion-sg"{
-  name = "vprofile-bastion-sg"
+resource "aws_security_group" "vprofile-bastion-sg" {
+  name        = "vprofile-bastion-sg"
   description = "Security group for bastion host"
-  vpc_id = "module.vpc.vpc_id"
+  vpc_id      = "module.vpc.vpc_id"
   egress {
-    from_port = 0
-    protocol  = "-1"
-    to_port   = 0
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
     cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
-    from_port = 22
-    protocol  = "tcp"
-    to_port   = 22
+    from_port   = 22
+    protocol    = "tcp"
+    to_port     = 22
     cidr_blocks = ["var.MYIP"]
   }
 }
 
-resource "aws_security_group" "vprofile-prod-sg"{
-  name = "vprofile-prod-sg"
+resource "aws_security_group" "vprofile-prod-sg" {
+  name        = "vprofile-prod-sg"
   description = "Security group for beanstalk instances"
-  vpc_id = "module.vpc.vpc_id"
+  vpc_id      = "module.vpc.vpc_id"
   egress {
-    from_port = 0
-    protocol  = "-1"
-    to_port   = 0
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
     cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
-    from_port = 22
-    protocol  = "tcp"
-    to_port   = 22
+    from_port       = 22
+    protocol        = "tcp"
+    to_port         = 22
     security_groups = [aws_security_group.vprofile-bastion-sg.id]
   }
 }
 
-resource "aws_security_group" "vprofile-backend-sg"{
-  name = "vprofile-backend-sg"
+resource "aws_security_group" "vprofile-backend-sg" {
+  name        = "vprofile-backend-sg"
   description = "Security group for RDS, rabbitmq,elastic cache instances"
-  vpc_id = "module.vpc.vpc_id"
+  vpc_id      = "module.vpc.vpc_id"
   egress {
-    from_port = 0
-    protocol  = "-1"
-    to_port   = 0
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
     cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
-    from_port = 0
-    protocol  = "-1"
-    to_port   = 0
+    from_port       = 0
+    protocol        = "-1"
+    to_port         = 0
     security_groups = [aws_security_group.vprofile-prod-sg.id]
   }
 }
